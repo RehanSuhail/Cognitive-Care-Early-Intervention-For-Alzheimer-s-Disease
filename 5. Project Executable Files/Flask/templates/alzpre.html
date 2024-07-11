@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload MRI Scan</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .upload-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .upload-container input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+        }
+        .upload-container button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .uploaded-image {
+            margin-top: 20px;
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h2>Upload an MRI Scan for Detection</h2>
+        <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <input type="file" name="image" accept=".jpg">
+            <button type="submit">Predict</button>
+        </form>
+        {% if image_path %}
+            <h3>Uploaded Image:</h3>
+            <img src="{{ url_for('static', filename='uploads/' + image_path.split('/')[-1]) }}" class="uploaded-image" alt="Uploaded MRI Scan">
+        {% endif %}
+        {% if result %}
+            <h3>Prediction: {{ result }}</h3>
+        {% endif %}
+    </div>
+
+    <script>
+        function validateForm() {
+            var fileInput = document.querySelector('input[type="file"]');
+            if (!fileInput.value) {
+                alert('Please select an image file.');
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+</html>
